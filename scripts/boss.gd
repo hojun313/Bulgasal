@@ -1,5 +1,8 @@
 extends CharacterBody2D
 
+signal health_changed(new_health)
+signal defeated
+
 @export var speed = 50.0
 @export var health = 100
 @export var attack_damage = 10
@@ -45,8 +48,10 @@ func _physics_process(delta):
 
 func take_damage(amount):
 	health -= amount
+	health_changed.emit(health)
 	print("Boss health: ", health)
 	if health <= 0:
+		defeated.emit()
 		queue_free()
 
 func _on_AttackArea_body_entered(body):

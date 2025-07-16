@@ -1,5 +1,8 @@
 extends CharacterBody2D
 
+signal health_changed(new_health)
+signal defeated
+
 @export var speed = 100.0
 @export var jump_velocity = -400.0
 @export var projectile_scene: PackedScene
@@ -40,6 +43,8 @@ func shoot():
 
 func take_damage(amount):
 	health -= amount
+	health_changed.emit(health)
 	print("Player health: ", health)
 	if health <= 0:
+		defeated.emit()
 		queue_free() # Player is defeated
