@@ -1,0 +1,62 @@
+[gd_scene load_steps=6 format=3 uid="uid://8djlxmd6pc4r"]
+
+[ext_resource type="Script" uid="uid://bg7032vu4xv7q" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/duoksin.tscn" id="3_duoksin"]
+
+[sub_resource type="RectangleShape2D" id="4_floor_shape"]
+size = Vector2(1024, 20)
+
+[sub_resource type="RectangleShape2D" id="5_wall_shape"]
+size = Vector2(20, 600)
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_main")
+
+[node name="Floor" type="StaticBody2D" parent="."]
+position = Vector2(512, 590)
+
+[node name="ColorRect" type="ColorRect" parent="Floor"]
+offset_left = -512.0
+offset_top = -10.0
+offset_right = 512.0
+offset_bottom = 10.0
+color = Color(0.5, 0.5, 0.5, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
+shape = SubResource("4_floor_shape")
+
+[node name="LeftWall" type="StaticBody2D" parent="."]
+position = Vector2(10, 300)
+
+[node name="ColorRect" type="ColorRect" parent="LeftWall"]
+offset_left = -10.0
+offset_top = -300.0
+offset_right = 10.0
+offset_bottom = 300.0
+color = Color(0.5, 0.5, 0.5, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWall"]
+shape = SubResource("5_wall_shape")
+
+[node name="RightWall" type="StaticBody2D" parent="."]
+position = Vector2(1014, 300)
+
+[node name="ColorRect" type="ColorRect" parent="RightWall"]
+offset_left = -10.0
+offset_top = -300.0
+offset_right = 10.0
+offset_bottom = 300.0
+color = Color(0.5, 0.5, 0.5, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall"]
+shape = SubResource("5_wall_shape")
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+position = Vector2(512, 500)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+zoom = Vector2(1.5, 1.5)
+
+[node name="Duoksin" parent="." instance=ExtResource("3_duoksin")]
+position = Vector2(300, 400)
