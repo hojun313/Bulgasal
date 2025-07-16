@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://8djlxmd6pc4r"]
+[gd_scene load_steps=9 format=3 uid="uid://8djlxmd6pc4r"]
 
 [ext_resource type="Script" uid="uid://bg7032vu4xv7q" path="res://scripts/main.gd" id="1_main"]
-[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" uid="uid://8djlxmd6pc4s" path="res://scenes/player.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://scenes/duoksin.tscn" id="3_duoksin"]
-[ext_resource type="PackedScene" path="res://scenes/health_bar.tscn" id="4_health_bar"]
+[ext_resource type="PackedScene" uid="uid://8djlxmd6pc4v" path="res://scenes/health_bar.tscn" id="4_health_bar"]
 [ext_resource type="PackedScene" uid="uid://8djlxmd6pc4w" path="res://scenes/game_end_ui.tscn" id="5_game_end_ui"]
+[ext_resource type="PackedScene" path="res://scenes/cooldown_display.tscn" id="6_cooldown_display"]
 
 [sub_resource type="RectangleShape2D" id="4_floor_shape"]
 size = Vector2(1024, 20)
@@ -77,3 +78,7 @@ offset_left = 462.0
 offset_top = 20.0
 offset_right = 562.0
 offset_bottom = 30.0
+
+[node name="CooldownDisplay" parent="UI" instance=ExtResource("6_cooldown_display")]
+
+[connection signal="cooldown_updated" from="Player" to="UI/CooldownDisplay" method="_on_player_cooldown_updated"]

@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 signal health_changed(new_health)
 signal defeated
+signal cooldown_updated(time_left)
 
 @export var speed = 100.0
 @export var jump_velocity = -400.0
@@ -12,6 +13,7 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var facing_direction = 1 # 1 for right, -1 for left
 var can_shoot = true
 @export var shoot_cooldown = 0.5 # 쿨다운 시간 (초)
+var current_cooldown_time = 0.0 # 현재 쿨다운 남은 시간
 
 func _physics_process(delta):
 	# Add the gravity. (Vertical movement)
@@ -35,8 +37,15 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("attack") and can_shoot:
 		shoot()
 		can_shoot = false
-		var timer = get_tree().create_timer(shoot_cooldown)
-		timer.timeout.connect(func(): can_shoot = true)
+		current_cooldown_time = shoot_cooldown
+		cooldown_updated.emit(current_cooldown_time)
+
+	if not can_shoot:
+		current_cooldown_time -= delta
+		if current_cooldown_time <= 0:
+			can_shoot = true
+			current_cooldown_time = 0.0
+		cooldown_updated.emit(current_cooldown_time)
 
 func shoot():
 	if projectile_scene:
