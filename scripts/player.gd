@@ -10,6 +10,8 @@ signal defeated
 
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var facing_direction = 1 # 1 for right, -1 for left
+var can_shoot = true
+@export var shoot_cooldown = 0.5 # 쿨다운 시간 (초)
 
 func _physics_process(delta):
 	# Add the gravity. (Vertical movement)
@@ -30,8 +32,11 @@ func _physics_process(delta):
 
 	move_and_slide()
 
-	if Input.is_action_just_pressed("attack"):
+	if Input.is_action_just_pressed("attack") and can_shoot:
 		shoot()
+		can_shoot = false
+		var timer = get_tree().create_timer(shoot_cooldown)
+		timer.timeout.connect(func(): can_shoot = true)
 
 func shoot():
 	if projectile_scene:

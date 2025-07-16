@@ -1,10 +1,14 @@
 extends Area2D
 
 @export var speed = 150.0 # 총알 속도를 늦춥니다.
+@export var life_time = 2.0 # 총알 수명 (초)
 var direction = 1 # 1 for right, -1 for left
 
 func _physics_process(delta):
 	position.x += direction * speed * delta
+	life_time -= delta
+	if life_time <= 0:
+		queue_free()
 
 func _on_body_entered(body):
 	if body.name == "Duoksin": # 보스에게만 피해를 줍니다.
