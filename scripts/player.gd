@@ -37,7 +37,8 @@ func shoot():
 	if projectile_scene:
 		var projectile = projectile_scene.instantiate()
 		get_parent().add_child(projectile)
-		projectile.global_position = global_position
+		projectile.global_position = global_position + Vector2(facing_direction * 20, 0) # 총알 생성 위치 조정
+		projectile.direction = facing_direction
 		if facing_direction == -1:
 			projectile.rotation_degrees = 180 # Rotate 180 degrees for left direction
 
