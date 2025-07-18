@@ -1,50 +1,59 @@
-[gd_scene load_steps=10 format=3 uid="uid://8djlxmd6pc4s"]
+[gd_scene load_steps=12 format=3 uid="uid://8djlxmd6pc4s"]
 
-[ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
-[ext_resource type="PackedScene" path="res://scenes/projectile.tscn" id="2_projectile"]
-[ext_resource type="Texture2D" uid="uid://your_green_character_idle_texture_uid" path="res://assets/main/character_green_idle.png" id="3_idle_sprite"]
-[ext_resource type="Texture2D" uid="uid://your_green_character_walk_a_texture_uid" path="res://assets/main/character_green_walk_a.png" id="4_walk_a_sprite"]
-[ext_resource type="Texture2D" uid="uid://your_green_character_walk_b_texture_uid" path="res://assets/main/character_green_walk_b.png" id="5_walk_b_sprite"]
-[ext_resource type="Texture2D" uid="uid://your_green_character_jump_texture_uid" path="res://assets/main/character_green_jump.png" id="6_jump_sprite"]
-[ext_resource type="AudioStream" uid="uid://your_jump_sound_uid" path="res://sounds/sfx_jump.ogg" id="7_jump_sound"]
-[ext_resource type="AudioStream" uid="uid://your_throw_sound_uid" path="res://sounds/sfx_throw.ogg" id="8_throw_sound"]
-[ext_resource type="AudioStream" uid="uid://your_hurt_sound_uid" path="res://sounds/sfx_hurt.ogg" id="9_hurt_sound"]
+[ext_resource type="Script" uid="uid://scdovgy7pmpq" path="res://scripts/player.gd" id="1_player"]
+[ext_resource type="PackedScene" uid="uid://8djlxmd6pc4u" path="res://scenes/projectile.tscn" id="2_projectile"]
+[ext_resource type="Texture2D" uid="uid://chlnj8spwr8l7" path="res://assets/main/character_green_idle.png" id="3_idle_sprite"]
+[ext_resource type="Texture2D" uid="uid://6y6ghwt2w2" path="res://assets/main/character_green_walk_a.png" id="4_walk_a_sprite"]
+[ext_resource type="Texture2D" uid="uid://2yavcdmaw2ac" path="res://assets/main/character_green_walk_b.png" id="5_walk_b_sprite"]
+[ext_resource type="Texture2D" uid="uid://ckfgaxmu2gyik" path="res://assets/main/character_green_jump.png" id="6_jump_sprite"]
+[ext_resource type="AudioStream" uid="uid://bq33rg7b3bji" path="res://sounds/sfx_jump.ogg" id="7_jump_sound"]
+[ext_resource type="AudioStream" uid="uid://bqnna1c1uew0r" path="res://sounds/sfx_throw.ogg" id="8_throw_sound"]
+[ext_resource type="AudioStream" uid="uid://dunlrmmyc3g7u" path="res://sounds/sfx_hurt.ogg" id="9_hurt_sound"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_player_anim"]
-animations = [
-{
-"frames": [ExtResource("3_idle_sprite")],
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_idle_sprite")
+}],
 "loop": true,
-"name": "idle",
+"name": &"idle",
 "speed": 5.0
-},
-{
-"frames": [ExtResource("4_walk_a_sprite"), ExtResource("5_walk_b_sprite")],
-"loop": true,
-"name": "walk",
-"speed": 5.0
-},
-{
-"frames": [ExtResource("6_jump_sprite")],
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_jump_sprite")
+}],
 "loop": false,
-"name": "jump",
+"name": &"jump",
 "speed": 5.0
-}
-]
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_walk_a_sprite")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_walk_b_sprite")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
 
 [sub_resource type="RectangleShape2D" id="4_shape"]
-size = Vector2(32, 32)
+size = Vector2(40, 49)
 
-[node name="Player" type="CharacterBody2D" collision_layer="1"]
+[node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_player")
 projectile_scene = ExtResource("2_projectile")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFrames_player_anim")
-animation = "idle"
-scale = Vector2(0.25, 0.25)
+animation = &"idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 7.5)
 shape = SubResource("4_shape")
 
 [node name="JumpSound" type="AudioStreamPlayer2D" parent="."]

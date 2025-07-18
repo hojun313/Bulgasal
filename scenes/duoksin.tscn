@@ -1,27 +1,30 @@
-[gd_scene load_steps=10 format=3 uid="uid://new_duoksin_uid"]
+[gd_scene load_steps=10 format=3 uid="uid://5isakgxmdpqd"]
 
-[ext_resource type="Script" path="res://scripts/boss.gd" id="1_boss"]
-[ext_resource type="Texture2D" uid="uid://your_frog_idle_texture_uid" path="res://assets/Duoksin/frog_idle.png" id="2_idle_sprite"]
-[ext_resource type="Texture2D" uid="uid://your_frog_jump_texture_uid" path="res://assets/Duoksin/frog_jump.png" id="3_jump_sprite"]
-[ext_resource type="AudioStream" uid="uid://your_jump_sound_uid" path="res://sounds/sfx_jump.ogg" id="4_jump_sound"]
-[ext_resource type="AudioStream" uid="uid://your_bump_sound_uid" path="res://sounds/sfx_bump.ogg" id="5_bump_sound"]
-[ext_resource type="AudioStream" uid="uid://your_hurt_sound_uid" path="res://sounds/sfx_hurt.ogg" id="6_hurt_sound"]
+[ext_resource type="Script" uid="uid://lhtw32xflh0k" path="res://scripts/boss.gd" id="1_boss"]
+[ext_resource type="Texture2D" uid="uid://cio0vp87wrg0t" path="res://assets/Duoksin/frog_idle.png" id="2_idle_sprite"]
+[ext_resource type="Texture2D" uid="uid://dgivml0kb67ej" path="res://assets/Duoksin/frog_jump.png" id="3_jump_sprite"]
+[ext_resource type="AudioStream" uid="uid://bq33rg7b3bji" path="res://sounds/sfx_jump.ogg" id="4_jump_sound"]
+[ext_resource type="AudioStream" uid="uid://bwqhwvsvtmf5c" path="res://sounds/sfx_bump.ogg" id="5_bump_sound"]
+[ext_resource type="AudioStream" uid="uid://dunlrmmyc3g7u" path="res://sounds/sfx_hurt.ogg" id="6_hurt_sound"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_boss_anim"]
-animations = [
-{
-"frames": [ExtResource("2_idle_sprite")],
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_idle_sprite")
+}],
 "loop": true,
-"name": "idle",
+"name": &"idle",
 "speed": 5.0
-},
-{
-"frames": [ExtResource("3_jump_sprite")],
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_jump_sprite")
+}],
 "loop": false,
-"name": "jump",
+"name": &"jump",
 "speed": 5.0
-}
-]
+}]
 
 [sub_resource type="RectangleShape2D" id="4_boss_shape"]
 size = Vector2(64, 64)
@@ -29,18 +32,18 @@ size = Vector2(64, 64)
 [sub_resource type="RectangleShape2D" id="5_attack_shape"]
 size = Vector2(70, 70)
 
-[node name="Duoksin" type="CharacterBody2D" collision_layer="2"]
+[node name="Duoksin" type="CharacterBody2D"]
 script = ExtResource("1_boss")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-sprite_frames = SubResource("SpriteFrames_boss_anim")
-animation = "idle"
 scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_boss_anim")
+animation = &"idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("4_boss_shape")
 
-[node name="AttackArea" type="Area2D" parent="." collision_layer="0" collision_mask="1"]
+[node name="AttackArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
 shape = SubResource("5_attack_shape")
