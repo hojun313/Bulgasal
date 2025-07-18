@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://8djlxmd6pc4s"]
+[gd_scene load_steps=10 format=3 uid="uid://8djlxmd6pc4s"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
 [ext_resource type="PackedScene" path="res://scenes/projectile.tscn" id="2_projectile"]
@@ -6,6 +6,9 @@
 [ext_resource type="Texture2D" uid="uid://your_green_character_walk_a_texture_uid" path="res://assets/main/character_green_walk_a.png" id="4_walk_a_sprite"]
 [ext_resource type="Texture2D" uid="uid://your_green_character_walk_b_texture_uid" path="res://assets/main/character_green_walk_b.png" id="5_walk_b_sprite"]
 [ext_resource type="Texture2D" uid="uid://your_green_character_jump_texture_uid" path="res://assets/main/character_green_jump.png" id="6_jump_sprite"]
+[ext_resource type="AudioStream" uid="uid://your_jump_sound_uid" path="res://sounds/sfx_jump.ogg" id="7_jump_sound"]
+[ext_resource type="AudioStream" uid="uid://your_throw_sound_uid" path="res://sounds/sfx_throw.ogg" id="8_throw_sound"]
+[ext_resource type="AudioStream" uid="uid://your_hurt_sound_uid" path="res://sounds/sfx_hurt.ogg" id="9_hurt_sound"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_player_anim"]
 animations = [
@@ -43,3 +46,12 @@ scale = Vector2(0.25, 0.25)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("4_shape")
+
+[node name="JumpSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_jump_sound")
+
+[node name="AttackSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("8_throw_sound")
+
+[node name="HurtSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("9_hurt_sound")

@@ -1,8 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://new_duoksin_uid"]
+[gd_scene load_steps=10 format=3 uid="uid://new_duoksin_uid"]
 
 [ext_resource type="Script" path="res://scripts/boss.gd" id="1_boss"]
 [ext_resource type="Texture2D" uid="uid://your_frog_idle_texture_uid" path="res://assets/Duoksin/frog_idle.png" id="2_idle_sprite"]
 [ext_resource type="Texture2D" uid="uid://your_frog_jump_texture_uid" path="res://assets/Duoksin/frog_jump.png" id="3_jump_sprite"]
+[ext_resource type="AudioStream" uid="uid://your_jump_sound_uid" path="res://sounds/sfx_jump.ogg" id="4_jump_sound"]
+[ext_resource type="AudioStream" uid="uid://your_bump_sound_uid" path="res://sounds/sfx_bump.ogg" id="5_bump_sound"]
+[ext_resource type="AudioStream" uid="uid://your_hurt_sound_uid" path="res://sounds/sfx_hurt.ogg" id="6_hurt_sound"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_boss_anim"]
 animations = [
@@ -53,6 +56,15 @@ one_shot = true
 
 [node name="ChargeTimer" type="Timer" parent="."]
 one_shot = true
+
+[node name="JumpSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_jump_sound")
+
+[node name="DashSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_bump_sound")
+
+[node name="HurtSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_hurt_sound")
 
 [connection signal="body_entered" from="AttackArea" to="." method="_on_AttackArea_body_entered"]
 [connection signal="timeout" from="JumpTimer" to="." method="_on_jump_timer_timeout"]

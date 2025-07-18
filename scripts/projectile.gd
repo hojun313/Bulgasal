@@ -1,6 +1,6 @@
 extends Area2D
 
-@export var speed = 150.0 # 총알 속도를 늦춥니다.
+@export var speed = 225.0 # 총알 속도를 늦춥니다.
 @export var life_time = 2.0 # 총알 수명 (초)
 var direction = 1 # 1 for right, -1 for left
 

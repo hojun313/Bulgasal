@@ -16,6 +16,9 @@ var can_shoot = true
 var current_cooldown_time = 0.0 # 현재 쿨다운 남은 시간
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var jump_sound: AudioStreamPlayer2D = $JumpSound
+@onready var attack_sound: AudioStreamPlayer2D = $AttackSound
+@onready var hurt_sound: AudioStreamPlayer2D = $HurtSound
 
 func _ready():
 	add_to_group("player")
@@ -28,6 +31,7 @@ func _physics_process(delta):
 	# Handle Jump. (Vertical movement)
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = jump_velocity
+		jump_sound.play()
 
 	# Get the input direction and handle the horizontal movement.
 	var direction = Input.get_axis("left", "right")
@@ -50,6 +54,7 @@ func _physics_process(delta):
 
 	if Input.is_action_just_pressed("attack") and can_shoot:
 		shoot()
+		attack_sound.play()
 		can_shoot = false
 		current_cooldown_time = shoot_cooldown
 		cooldown_updated.emit(current_cooldown_time)
@@ -73,6 +78,7 @@ func shoot():
 func take_damage(amount):
 	health -= amount
 	health_changed.emit(health)
+	hurt_sound.play()
 	print("Player health: ", health)
 	if health <= 0:
 		defeated.emit()

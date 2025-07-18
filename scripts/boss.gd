@@ -28,6 +28,10 @@ var dash_direction = 0
 var dash_duration = 0.3
 var charge_duration = 0.5
 
+@onready var jump_sound: AudioStreamPlayer2D = $JumpSound
+@onready var dash_sound: AudioStreamPlayer2D = $DashSound
+@onready var hurt_sound: AudioStreamPlayer2D = $HurtSound
+
 func _ready():
 	player = get_parent().find_child("Player")
 
@@ -81,6 +85,7 @@ func _physics_process(delta):
 func take_damage(amount):
 	health -= amount
 	health_changed.emit(health)
+	hurt_sound.play()
 	print("Boss health: ", health)
 	if health <= 0:
 		defeated.emit()
@@ -94,6 +99,7 @@ func _on_AttackArea_body_entered(body):
 func _on_jump_timer_timeout():
 	if is_on_floor():
 		velocity.y = jump_velocity
+		jump_sound.play()
 		animated_sprite.play("jump")
 		animated_sprite.animation_finished.connect(func(): animated_sprite.play("idle"), CONNECT_ONE_SHOT)
 	# Reset timer for next jump
@@ -119,6 +125,7 @@ func _on_dash_timer_timeout():
 func _on_charge_timer_timeout():
 	is_charging = false
 	is_dashing = true
+	dash_sound.play()
 	dash_duration_timer.start()
 
 func _on_dash_duration_timer_timeout():
