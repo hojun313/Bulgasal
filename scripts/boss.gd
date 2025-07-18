@@ -51,19 +51,30 @@ func _physics_process(delta):
 	if is_dashing:
 		# Dashing movement
 		velocity.x = dash_direction * dash_speed
-		animated_sprite.play("idle") # Keep idle during dash for now
 	elif is_charging:
 		# Charging, so no movement
 		velocity.x = 0
-		animated_sprite.play("idle") # Keep idle during charge
 	else:
 		# Normal movement towards player
 		velocity.x = direction * speed
-		animated_sprite.play("idle") # Boss always idle when moving normally
+
+	# Animation logic
+	if not is_on_floor():
+		if animated_sprite.animation != "jump":
+			animated_sprite.play("jump")
+	elif is_charging:
+		if animated_sprite.animation != "idle": # Or a specific charging animation if available
+			animated_sprite.play("idle")
+	elif is_dashing:
+		if animated_sprite.animation != "idle": # Or a specific dashing animation if available
+			animated_sprite.play("idle")
+	else: # On floor, not charging, not dashing
+		if animated_sprite.animation != "idle":
+			animated_sprite.play("idle")
 
 	# Flip sprite based on direction
 	if direction != 0:
-		animated_sprite.flip_h = direction == -1
+		animated_sprite.flip_h = direction == 1 # Assuming default sprite faces left, flip when moving right
 
 	move_and_slide()
 
