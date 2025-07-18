@@ -4,8 +4,8 @@ signal health_changed(new_health)
 signal defeated
 signal cooldown_updated(time_left)
 
-@export var speed = 100.0
-@export var jump_velocity = -400.0
+@export var speed = 150.0
+@export var jump_velocity = -500.0
 @export var projectile_scene: PackedScene
 @export var health = 100
 
@@ -14,6 +14,9 @@ var facing_direction = 1 # 1 for right, -1 for left
 var can_shoot = true
 @export var shoot_cooldown = 0.5 # 쿨다운 시간 (초)
 var current_cooldown_time = 0.0 # 현재 쿨다운 남은 시간
+
+func _ready():
+	add_to_group("player")
 
 func _physics_process(delta):
 	# Add the gravity. (Vertical movement)

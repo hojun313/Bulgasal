@@ -10,39 +10,55 @@ signal defeated
 @export var dash_speed = 300.0
 
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
-var jump_timer: Timer
-var dash_timer: Timer
+var player = null
+
+# Nodes
+@onready var color_rect: ColorRect = $ColorRect
+
+# Timers
+@onready var jump_timer: Timer = $JumpTimer
+@onready var dash_timer: Timer = $DashTimer
+@onready var dash_duration_timer: Timer = $DashDurationTimer
+@onready var charge_timer: Timer = $ChargeTimer
+
+# State
 var is_dashing = false
+var is_charging = false
 var dash_direction = 0
 var dash_duration = 0.3
+var charge_duration = 0.5
+var original_color: Color
 
 func _ready():
-	jump_timer = Timer.new()
-	add_child(jump_timer)
-	jump_timer.wait_time = randf_range(2.0, 5.0)
-	jump_timer.autostart = true
-	jump_timer.timeout.connect(_on_jump_timer_timeout)
+	player = get_parent().find_child("Player")
+	original_color = color_rect.color
 
-	dash_timer = Timer.new()
-	add_child(dash_timer)
+	# Setup timers
+	jump_timer.wait_time = randf_range(2.0, 5.0)
 	dash_timer.wait_time = randf_range(3.0, 7.0)
-	dash_timer.autostart = true
-	dash_timer.timeout.connect(_on_dash_timer_timeout)
+	dash_duration_timer.wait_time = dash_duration
+	charge_timer.wait_time = charge_duration
+
 
 func _physics_process(delta):
-	# Add the gravity.
+	# Add gravity
 	if not is_on_floor():
 		velocity.y += gravity * delta
 
+	var direction = 0
+	if player:
+		# Determine direction towards player
+		direction = sign(player.global_position.x - global_position.x)
+
 	if is_dashing:
+		# Dashing movement
 		velocity.x = dash_direction * dash_speed
+	elif is_charging:
+		# Charging, so no movement
+		velocity.x = 0
 	else:
-		# Simple movement for now, will be replaced with actual boss AI
-		velocity.x = speed
-		for i in get_slide_collision_count():
-			var collision = get_slide_collision(i)
-			if collision.get_collider() is StaticBody2D: # Assuming walls are StaticBody2D
-				speed *= -1 # Reverse direction
+		# Normal movement towards player
+		velocity.x = direction * speed
 
 	move_and_slide()
 
@@ -55,33 +71,38 @@ func take_damage(amount):
 		queue_free()
 
 func _on_AttackArea_body_entered(body):
-	if body.has_method("take_damage"):
+	# Assuming the player has a "take_damage" method
+	if body.is_in_group("player"):
 		body.take_damage(attack_damage)
 
 func _on_jump_timer_timeout():
 	if is_on_floor():
 		velocity.y = jump_velocity
+	# Reset timer for next jump
 	jump_timer.wait_time = randf_range(2.0, 5.0)
 	jump_timer.start()
 
 func _on_dash_timer_timeout():
-	if is_on_floor():
-		is_dashing = true
-		var player = get_parent().find_child("Player")
+	if is_on_floor() and not is_dashing and not is_charging:
+		is_charging = true
+		color_rect.color = Color.YELLOW
 		if player:
 			dash_direction = sign(player.global_position.x - global_position.x)
 		else:
-			dash_direction = sign(randf_range(-1.0, 1.0))
+			# If player not found, dash in a random direction
+			dash_direction = 1 if randf() > 0.5 else -1
+		
+		charge_timer.start()
 
-		var end_dash_timer = Timer.new()
-		add_child(end_dash_timer)
-		end_dash_timer.wait_time = dash_duration
-		end_dash_timer.one_shot = true
-		end_dash_timer.timeout.connect(func():
-			is_dashing = false
-			end_dash_timer.queue_free()
-		)
-		end_dash_timer.start()
-
+	# Reset timer for next dash
 	dash_timer.wait_time = randf_range(3.0, 7.0)
 	dash_timer.start()
+
+func _on_charge_timer_timeout():
+	is_charging = false
+	is_dashing = true
+	dash_duration_timer.start()
+
+func _on_dash_duration_timer_timeout():
+	is_dashing = false
+	color_rect.color = original_color

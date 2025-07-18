@@ -6,9 +6,9 @@
 size = Vector2(64, 64)
 
 [sub_resource type="RectangleShape2D" id="3_attack_shape"]
-size = Vector2(64, 64)
+size = Vector2(70, 70)  ; Slightly larger to ensure contact
 
-[node name="Duoksin" type="CharacterBody2D"]
+[node name="Duoksin" type="CharacterBody2D" collision_layer="2"]
 script = ExtResource("1_boss")
 
 [node name="ColorRect" type="ColorRect" parent="."]
@@ -22,9 +22,25 @@ color = Color(0.8, 0.2, 0.2, 1.0)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("2_boss_shape")
 
-[node name="AttackArea" type="Area2D" parent="."]
+[node name="AttackArea" type="Area2D" parent="." collision_layer="0" collision_mask="1"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
 shape = SubResource("3_attack_shape")
 
+[node name="JumpTimer" type="Timer" parent="."]
+autostart = true
+
+[node name="DashTimer" type="Timer" parent="."]
+autostart = true
+
+[node name="DashDurationTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="ChargeTimer" type="Timer" parent="."]
+one_shot = true
+
 [connection signal="body_entered" from="AttackArea" to="." method="_on_AttackArea_body_entered"]
+[connection signal="timeout" from="JumpTimer" to="." method="_on_jump_timer_timeout"]
+[connection signal="timeout" from="DashTimer" to="." method="_on_dash_timer_timeout"]
+[connection signal="timeout" from="DashDurationTimer" to="." method="_on_dash_duration_timer_timeout"]
+[connection signal="timeout" from="ChargeTimer" to="." method="_on_charge_timer_timeout"]
