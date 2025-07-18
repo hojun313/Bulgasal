@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://8djlxmd6pc4v" path="res://scenes/health_bar.tscn" id="4_health_bar"]
 [ext_resource type="PackedScene" uid="uid://8djlxmd6pc4w" path="res://scenes/game_end_ui.tscn" id="5_game_end_ui"]
 [ext_resource type="PackedScene" path="res://scenes/cooldown_display.tscn" id="6_cooldown_display"]
-[ext_resource type="PackedScene" path="res://scenes/blacksmith.tscn" id="7_blacksmith_scene"]
+[ext_resource type="PackedScene" uid="uid://bjd78hq7wnte3" path="res://scenes/blacksmith.tscn" id="7_blacksmith_scene"]
 
 [sub_resource type="RectangleShape2D" id="4_floor_shape"]
 size = Vector2(640, 20)
@@ -18,6 +18,7 @@ size = Vector2(20, 360)
 script = ExtResource("1_main")
 game_end_ui_scene = ExtResource("5_game_end_ui")
 blacksmith_scene = ExtResource("7_blacksmith_scene")
+duoksin_scene = ExtResource("3_duoksin")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(320, 180)
@@ -65,9 +66,6 @@ shape = SubResource("5_wall_shape")
 [node name="Player" parent="." instance=ExtResource("2_player")]
 position = Vector2(320, 300)
 
-[node name="Duoksin" parent="." instance=ExtResource("3_duoksin")]
-position = Vector2(100, 300)
-
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="PlayerHealthBar" parent="UI" instance=ExtResource("4_health_bar")]
@@ -84,4 +82,5 @@ offset_bottom = 30.0
 
 [node name="CooldownDisplay" parent="UI" instance=ExtResource("6_cooldown_display")]
 
-[connection signal="cooldown_updated" from="Player" to="UI/CooldownDisplay" method="_on_player_cooldown_updated"]
+[node name="TransitionLayer" type="CanvasLayer" parent="."]
+layer = 100

@@ -1,9 +1,18 @@
-[gd_scene load_steps=2 format=3 uid="uid://blacksmith_scene_uid"]
+[gd_scene load_steps=6 format=3 uid="uid://bjd78hq7wnte3"]
 
-[ext_resource type="Script" path="res://scripts/blacksmith.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://6ecrq2lqkoiq" path="res://scripts/blacksmith.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://8djlxmd6pc4s" path="res://scenes/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/jangsanbeom.tscn" id="3_jangsanbeom"]
+
+[sub_resource type="RectangleShape2D" id="4_floor_shape"]
+size = Vector2(640, 20)
+
+[sub_resource type="RectangleShape2D" id="3_exit_area_shape"]
+size = Vector2(20, 360)
 
 [node name="Blacksmith" type="Node2D"]
 script = ExtResource("1_script")
+jangsanbeom_scene = ExtResource("3_jangsanbeom")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 anchors_preset = 15
@@ -26,3 +35,27 @@ grow_vertical = 2
 text = "대장간"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Floor" type="StaticBody2D" parent="."]
+position = Vector2(320, 350)
+
+[node name="ColorRect" type="ColorRect" parent="Floor"]
+offset_left = -320.0
+offset_top = -10.0
+offset_right = 320.0
+offset_bottom = 10.0
+color = Color(0.5, 0.5, 0.5, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
+shape = SubResource("4_floor_shape")
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+position = Vector2(100, 300)
+
+[node name="ExitArea" type="Area2D" parent="."]
+position = Vector2(630, 180)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitArea"]
+shape = SubResource("3_exit_area_shape")
+
+[connection signal="body_entered" from="ExitArea" to="." method="_on_ExitArea_body_entered"]

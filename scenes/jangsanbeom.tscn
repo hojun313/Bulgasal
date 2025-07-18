@@ -1,0 +1,81 @@
+[gd_scene load_steps=12 format=3 uid="uid://jangsanbeom_scene_uid"]
+
+[ext_resource type="Script" path="res://scripts/jangsanbeom.gd" id="1_jangsanbeom_script"]
+[ext_resource type="Texture2D" uid="uid://your_frog_idle_texture_uid" path="res://assets/Duoksin/frog_idle.png" id="2_idle_sprite"]
+[ext_resource type="Texture2D" uid="uid://your_frog_jump_texture_uid" path="res://assets/Duoksin/frog_idle.png" id="3_jump_sprite"]
+[ext_resource type="AudioStream" uid="uid://bq33rg7b3bji" path="res://sounds/sfx_jump.ogg" id="4_jump_sound"]
+[ext_resource type="AudioStream" uid="uid://bwqhwvsvtmf5c" path="res://sounds/sfx_bump.ogg" id="5_bump_sound"]
+[ext_resource type="AudioStream" uid="uid://dunlrmmyc3g7u" path="res://sounds/sfx_hurt.ogg" id="6_hurt_sound"]
+[ext_resource type="AudioStream" uid="uid://your_magic_sound_uid" path="res://sounds/sfx_magic.ogg" id="7_roar_sound"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jangsanbeom_anim"]
+animations = [
+{
+"frames": [ExtResource("2_idle_sprite")],
+"loop": true,
+"name": "idle",
+"speed": 5.0
+},
+{
+"frames": [ExtResource("3_jump_sprite")],
+"loop": false,
+"name": "jump",
+"speed": 5.0
+}
+]
+
+[sub_resource type="RectangleShape2D" id="8_boss_shape"]
+size = Vector2(64, 64)
+
+[sub_resource type="RectangleShape2D" id="9_attack_shape"]
+size = Vector2(70, 70)
+
+[node name="Jangsanbeom" type="CharacterBody2D"]
+script = ExtResource("1_jangsanbeom_script")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_jangsanbeom_anim")
+animation = "idle"
+scale = Vector2(0.5, 0.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("8_boss_shape")
+
+[node name="AttackArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
+shape = SubResource("9_attack_shape")
+
+[node name="JumpTimer" type="Timer" parent="."]
+autostart = true
+
+[node name="DashTimer" type="Timer" parent="."]
+autostart = true
+
+[node name="DashDurationTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="ChargeTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="RoarTimer" type="Timer" parent="."]
+autostart = true
+
+[node name="JumpSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_jump_sound")
+
+[node name="DashSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_bump_sound")
+
+[node name="HurtSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_hurt_sound")
+
+[node name="RoarSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_roar_sound")
+
+[connection signal="body_entered" from="AttackArea" to="." method="_on_AttackArea_body_entered"]
+[connection signal="timeout" from="JumpTimer" to="." method="_on_jump_timer_timeout"]
+[connection signal="timeout" from="DashTimer" to="." method="_on_dash_timer_timeout"]
+[connection signal="timeout" from="DashDurationTimer" to="." method="_on_dash_duration_timer_timeout"]
+[connection signal="timeout" from="ChargeTimer" to="." method="_on_charge_timer_timeout"]
+[connection signal="timeout" from="RoarTimer" to="." method="_on_roar_timer_timeout"]
