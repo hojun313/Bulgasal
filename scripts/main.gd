@@ -1,6 +1,7 @@
 extends Node2D
 
 @export var game_end_ui_scene: PackedScene
+@export var blacksmith_scene: PackedScene # Add this line
 
 func _ready():
 	print("Main scene loaded!")
@@ -30,7 +31,7 @@ func _on_player_defeated():
 	show_game_end_ui("Game Over!")
 
 func _on_boss_defeated():
-	show_game_end_ui("You Win!")
+	get_tree().change_scene_to_file(blacksmith_scene.resource_path)
 
 func show_game_end_ui(message):
 	if game_end_ui_scene:
