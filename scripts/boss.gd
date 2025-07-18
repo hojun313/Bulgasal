@@ -13,7 +13,7 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var player = null
 
 # Nodes
-@onready var sprite: Sprite2D = $Sprite2D
+@onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 # Timers
 @onready var jump_timer: Timer = $JumpTimer
@@ -51,12 +51,19 @@ func _physics_process(delta):
 	if is_dashing:
 		# Dashing movement
 		velocity.x = dash_direction * dash_speed
+		animated_sprite.play("idle") # Keep idle during dash for now
 	elif is_charging:
 		# Charging, so no movement
 		velocity.x = 0
+		animated_sprite.play("idle") # Keep idle during charge
 	else:
 		# Normal movement towards player
 		velocity.x = direction * speed
+		animated_sprite.play("idle") # Boss always idle when moving normally
+
+	# Flip sprite based on direction
+	if direction != 0:
+		animated_sprite.flip_h = direction == -1
 
 	move_and_slide()
 
@@ -76,6 +83,8 @@ func _on_AttackArea_body_entered(body):
 func _on_jump_timer_timeout():
 	if is_on_floor():
 		velocity.y = jump_velocity
+		animated_sprite.play("jump")
+		animated_sprite.animation_finished.connect(func(): animated_sprite.play("idle"), CONNECT_ONE_SHOT)
 	# Reset timer for next jump
 	jump_timer.wait_time = randf_range(2.0, 5.0)
 	jump_timer.start()
@@ -83,7 +92,7 @@ func _on_jump_timer_timeout():
 func _on_dash_timer_timeout():
 	if is_on_floor() and not is_dashing and not is_charging:
 		is_charging = true
-		sprite.modulate = Color.YELLOW
+		animated_sprite.modulate = Color.YELLOW
 		if player:
 			dash_direction = sign(player.global_position.x - global_position.x)
 		else:
@@ -103,4 +112,4 @@ func _on_charge_timer_timeout():
 
 func _on_dash_duration_timer_timeout():
 	is_dashing = false
-	sprite.modulate = Color.WHITE
+	animated_sprite.modulate = Color.WHITE

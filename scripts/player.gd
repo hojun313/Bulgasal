@@ -15,6 +15,8 @@ var can_shoot = true
 @export var shoot_cooldown = 0.5 # 쿨다운 시간 (초)
 var current_cooldown_time = 0.0 # 현재 쿨다운 남은 시간
 
+@onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
+
 func _ready():
 	add_to_group("player")
 
@@ -32,10 +34,19 @@ func _physics_process(delta):
 	if direction:
 		velocity.x = direction * speed
 		facing_direction = sign(direction)
+		animated_sprite.flip_h = facing_direction == -1
 	else:
 		velocity.x = move_toward(velocity.x, 0, speed)
 
 	move_and_slide()
+
+	# Animation logic
+	if not is_on_floor():
+		animated_sprite.play("jump")
+	elif direction != 0:
+		animated_sprite.play("walk")
+	else:
+		animated_sprite.play("idle")
 
 	if Input.is_action_just_pressed("attack") and can_shoot:
 		shoot()
