@@ -13,7 +13,7 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var player = null
 
 # Nodes
-@onready var color_rect: ColorRect = $ColorRect
+@onready var sprite: Sprite2D = $Sprite2D
 
 # Timers
 @onready var jump_timer: Timer = $JumpTimer
@@ -27,11 +27,9 @@ var is_charging = false
 var dash_direction = 0
 var dash_duration = 0.3
 var charge_duration = 0.5
-var original_color: Color
 
 func _ready():
 	player = get_parent().find_child("Player")
-	original_color = color_rect.color
 
 	# Setup timers
 	jump_timer.wait_time = randf_range(2.0, 5.0)
@@ -85,7 +83,7 @@ func _on_jump_timer_timeout():
 func _on_dash_timer_timeout():
 	if is_on_floor() and not is_dashing and not is_charging:
 		is_charging = true
-		color_rect.color = Color.YELLOW
+		sprite.modulate = Color.YELLOW
 		if player:
 			dash_direction = sign(player.global_position.x - global_position.x)
 		else:
@@ -105,4 +103,4 @@ func _on_charge_timer_timeout():
 
 func _on_dash_duration_timer_timeout():
 	is_dashing = false
-	color_rect.color = original_color
+	sprite.modulate = Color.WHITE
