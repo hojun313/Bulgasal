@@ -8,22 +8,26 @@
 [ext_resource type="PackedScene" path="res://scenes/cooldown_display.tscn" id="6_cooldown_display"]
 
 [sub_resource type="RectangleShape2D" id="4_floor_shape"]
-size = Vector2(1024, 20)
+size = Vector2(640, 20)
 
 [sub_resource type="RectangleShape2D" id="5_wall_shape"]
-size = Vector2(20, 600)
+size = Vector2(20, 360)
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_main")
 game_end_ui_scene = ExtResource("5_game_end_ui")
 
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(320, 180)
+zoom = Vector2(1.67, 1.67)
+
 [node name="Floor" type="StaticBody2D" parent="."]
-position = Vector2(512, 590)
+position = Vector2(320, 350)
 
 [node name="ColorRect" type="ColorRect" parent="Floor"]
-offset_left = -512.0
+offset_left = -320.0
 offset_top = -10.0
-offset_right = 512.0
+offset_right = 320.0
 offset_bottom = 10.0
 color = Color(0.5, 0.5, 0.5, 1)
 
@@ -31,52 +35,49 @@ color = Color(0.5, 0.5, 0.5, 1)
 shape = SubResource("4_floor_shape")
 
 [node name="LeftWall" type="StaticBody2D" parent="."]
-position = Vector2(10, 300)
+position = Vector2(10, 180)
 
 [node name="ColorRect" type="ColorRect" parent="LeftWall"]
 offset_left = -10.0
-offset_top = -300.0
+offset_top = -180.0
 offset_right = 10.0
-offset_bottom = 300.0
+offset_bottom = 180.0
 color = Color(0.5, 0.5, 0.5, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWall"]
 shape = SubResource("5_wall_shape")
 
 [node name="RightWall" type="StaticBody2D" parent="."]
-position = Vector2(1014, 300)
+position = Vector2(630, 180)
 
 [node name="ColorRect" type="ColorRect" parent="RightWall"]
 offset_left = -10.0
-offset_top = -300.0
+offset_top = -180.0
 offset_right = 10.0
-offset_bottom = 300.0
+offset_bottom = 180.0
 color = Color(0.5, 0.5, 0.5, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall"]
 shape = SubResource("5_wall_shape")
 
 [node name="Player" parent="." instance=ExtResource("2_player")]
-position = Vector2(512, 500)
-
-[node name="Camera2D" type="Camera2D" parent="Player"]
-zoom = Vector2(1.5, 1.5)
+position = Vector2(320, 300)
 
 [node name="Duoksin" parent="." instance=ExtResource("3_duoksin")]
-position = Vector2(300, 400)
+position = Vector2(100, 300)
 
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="PlayerHealthBar" parent="UI" instance=ExtResource("4_health_bar")]
 offset_left = 20.0
-offset_top = 570.0
+offset_top = 330.0
 offset_right = 120.0
-offset_bottom = 580.0
+offset_bottom = 340.0
 
 [node name="BossHealthBar" parent="UI" instance=ExtResource("4_health_bar")]
-offset_left = 462.0
+offset_left = 270.0
 offset_top = 20.0
-offset_right = 562.0
+offset_right = 370.0
 offset_bottom = 30.0
 
 [node name="CooldownDisplay" parent="UI" instance=ExtResource("6_cooldown_display")]
